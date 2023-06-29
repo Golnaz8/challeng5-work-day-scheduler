@@ -26,7 +26,8 @@ $(function () {
 var currentDayEl = $('#currentDay');
 var saveBtnEl = $('.saveBtn');
 var descriptionEl = $('.description');
-var containerLgEl = $('.container-lg');                   
+var containerLgEl = $('.container-lg');  
+var textEl = $('#text');                 
 var today = dayjs();
 
 
@@ -57,13 +58,14 @@ if (thisHourNum>6 && thisHourNum<18) {
     }
 
 }else if(thisHourNum<7) {
-    for (var i=0; i=10; i++) {
+    for (var i=0; i<11; i++) {
         afterPresent(i);
     }
-}else {
-    for (var i=0; i=10; i++) {
+}else if(thisHourNum>17) {
+    for (var i=0; i<11; i++) {
         beforePresent(i);
     }
+
 }
     
 
@@ -91,18 +93,28 @@ function refreshPageWhenHourChanged(){
      location.reload();
     }
     currentHourLastTime = currentHour;
- }
+}
  
- setInterval(refreshPageWhenHourChanged,1000);
+setInterval(refreshPageWhenHourChanged,1000);
 
+function retrieveFromLocalStorage() {
+    var savedUserText = JSON.parse(localStorage.getItem('userText'));
 
-saveBtnEl.on('click',function(event) {
-    var btnClicked = $(event.target);
-    console.log(btnClicked);
-    // var info = hours.slice(0 , 1);
-    // console.log(info);
-    // btnClicked.attr('data-info', info);
-            
+    if (!savedUserText) {
+        return [];
+    }
+    return savedUserText;
+}
 
+function saveToLocalStorage() {
+    localStorage.setItem('userText', JSON.stringify('userText'));
+}
+
+saveBtnEl.on('click',function() {
+    var time = $(this).parent().attr("id");
+    var text = $(this).siblings(".description").val().trim();
+    console.log(time);
+    console.log(text);
 });
+
 
