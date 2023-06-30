@@ -32,8 +32,14 @@ THEN the saved events persist
 
 ## Mock-Up
 
+The following screenshot demonstrates the application appearance:
+![image](https://github.com/Golnaz8/challeng5-work-day-scheduler/assets/133593128/3dabd7bf-7820-43a7-aeb2-4369a450c69a)
+
+
 
 ## Github pages link
+
+https://golnaz8.github.io/challeng5-work-day-scheduler/
 
 
 © 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
