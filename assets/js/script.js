@@ -1,39 +1,9 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
-$(function () {
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
-    //
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
-    //
-    // TODO: Add code to display the current date in the header of the page.
-});
-  
-  
 var currentDayEl = $('#currentDay');
 var saveBtnEl = $('.saveBtn');
-var descriptionEl = $('.description');
-var containerLgEl = $('.container-lg');  
-var textEl = $('#text');                 
+var containerLgEl = $('.container-lg');                
 var today = dayjs();
 
-
-var hours = ['7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17']; 
-
-
+var hours = ['9', '10', '11', '12', '13', '14', '15', '16', '17']; 
 
 var date = today.format('dddd, MMMM-D, YYYY');
 currentDayEl.text(date);
@@ -41,7 +11,7 @@ var thisHour = today.format('H');
 var currentHourLastTime = thisHour;
 var thisHourNum = parseInt(thisHour);
 
-if (thisHourNum>6 && thisHourNum<18) {
+if (thisHourNum>8 && thisHourNum<18) {
     console.log(`true`);
     var index = hours.indexOf(thisHour);
     console.log(index);
@@ -57,18 +27,16 @@ if (thisHourNum>6 && thisHourNum<18) {
         afterPresent(i);
     }
 
-}else if(thisHourNum<7) {
-    for (var i=0; i<11; i++) {
+}else if(thisHourNum<9) {
+    for (var i=0; i<9; i++) {
         afterPresent(i);
     }
 }else if(thisHourNum>17) {
-    for (var i=0; i<11; i++) {
+    for (var i=0; i<9; i++) {
         beforePresent(i);
     }
-
 }
     
-
 function beforePresent(num) {
     var choose = containerLgEl.children().eq(num);
     console.log(choose);
@@ -106,15 +74,52 @@ function retrieveFromLocalStorage() {
     return savedUserText;
 }
 
-function saveToLocalStorage() {
-    localStorage.setItem('userText', JSON.stringify('userText'));
+function saveToLocalStorage(userText) {
+    localStorage.setItem('userText', JSON.stringify(userText));
+}
+
+function renderAfterLoad() {
+    var savedUserTexts = retrieveFromLocalStorage();
+  
+    for (var i = 9; i <= 17; i++) {
+      var timeIdEl = document.getElementById(`hour-${i}`);
+      var textInput = timeIdEl.querySelector('.description');
+      
+      var savedText = savedUserTexts.find(function (event) {
+        return event.time === `hour-${i}`;
+      });
+      if (savedText) {
+        textInput.value = savedText.text;
+      }
+    }
 }
 
 saveBtnEl.on('click',function() {
+    var savedUserTexts = retrieveFromLocalStorage();
+    console.log(savedUserTexts);
     var time = $(this).parent().attr("id");
     var text = $(this).siblings(".description").val().trim();
-    console.log(time);
-    console.log(text);
+    
+    var textIndex = savedUserTexts.findIndex(function (event) {
+        return event.time === time;
+    });
+  
+    if (textIndex !== -1) {
+        savedUserTexts[textIndex].text = text;
+    } else {
+        savedUserTexts.push({ time: time, text: text });
+    }
+  
+    saveToLocalStorage(savedUserTexts);
 });
+
+function init() {
+    renderAfterLoad();
+}
+
+$(document).ready(init);
+
+
+
 
 
