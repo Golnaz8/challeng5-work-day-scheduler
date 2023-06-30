@@ -14,8 +14,8 @@ var thisHour = today.format('H');
 var currentHourLastTime = thisHour;
 var thisHourNum = parseInt(thisHour);
 
-//if current time is in the work shift hour then just this hour should be red as present time
-//all hours before that should be gray as past time and all hours after that should be green as future time 
+//if current time is in the work shift hour then just this timeblock should be red as present time
+//all timeblocks before that should be gray as past time and all timeblocks after that should be green as future time 
 if (thisHourNum>8 && thisHourNum<18) {
     console.log(`true`);
     var index = hours.indexOf(thisHour);
@@ -60,7 +60,7 @@ function afterPresent(num) {
     choose.removeClass('present');
 }
 
-//function to check if the hour changed, reload the page to change the time block boxes 
+//function to check if the hour changed, reload the page to change the timeblocks color 
 function refreshPageWhenHourChanged(){
     var currentDay = dayjs();
     var currentHour = currentDay.format('H');
@@ -97,7 +97,7 @@ function renderAfterLoad() {
       var timeIdEl = document.getElementById(`hour-${i}`);
       var textInput = timeIdEl.querySelector('.description');
       
-      //Find the saved userText for the current time id(like hour-12)
+      //Find the saved userText for the current timeblock(like hour-12)
       var savedText = savedUserTexts.find(function (event) {
         return event.time === `hour-${i}`;
       });
@@ -116,7 +116,7 @@ saveBtnEl.on('click',function() {
     var time = $(this).parent().attr("id");
     var text = $(this).siblings(".description").val().trim();
     
-    //find the index of saved userText for the current time id
+    //find the index of saved userText for the current timeblock
     var textIndex = savedUserTexts.findIndex(function (event) {
         return event.time === time;
     });
